@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALPHAS - Elite Fraternity</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 z-50 transition-all duration-300" id="navbar">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <div class="flex items-center space-x-3">
+                    <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-10 h-10 rounded-lg object-cover">
+                    <span class="text-2xl font-black text-gray-900 dark:text-white tracking-wider">ALPHAS</span>
+                </div>
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#home" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Home
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#about" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        About
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#pillars" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Core Pillars
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:hover:text-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="#contact" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Contact
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:hover:text-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="/admin" id="adminLink" class="hidden text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Admin
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <a href="/login" id="loginLink" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Login
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
+                    <button class="w-10 h-10 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+                <div class="md:hidden flex flex-col space-y-1 cursor-pointer" id="hamburger">
+                    <span class="w-6 h-0.5 bg-gray-900 dark:bg-white transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-gray-900 dark:bg-white transition-all duration-300"></span>
+                    <span class="w-6 h-0.5 bg-gray-900 dark:bg-white transition-all duration-300"></span>
+                </div>
+            </div>
+        </div>
+        <!-- Mobile Menu -->
+        <div class="hidden md:hidden fixed top-20 left-0 w-full bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 transition-all duration-300" id="mobileMenu">
+            <div class="max-w-6xl mx-auto px-4 py-4 space-y-4">
+                <a href="#home" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Home</a>
+                <a href="#about" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">About</a>
+                <a href="#pillars" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Core Pillars</a>
+                <a href="#contact" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Contact</a>
+                <a href="/admin" id="mobileAdminLink" class="hidden block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Admin</a>
+                <a href="/login" id="mobileLoginLink" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Login</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center bg-white dark:bg-black relative overflow-hidden pt-20">
+        <div class="flex-1 text-center px-8 z-10">
+            <div class="mb-8">
+                <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-32 h-32 rounded-2xl object-cover mx-auto shadow-2xl">
+            </div>
+            <h1 class="text-6xl md:text-7xl font-black mb-4 tracking-widest text-black dark:text-white">ALPHAS</h1>
+            <p class="text-xl text-black dark:text-white mb-4 font-semibold">Elite Brotherhood • Leadership • Excellence</p>
+            <p class="text-lg text-black dark:text-white max-w-3xl mx-auto mb-8 leading-relaxed">Forging the next generation of leaders through brotherhood, discipline, and unwavering commitment to excellence.</p>
+            
+            <!-- ALPHAS Acronym -->
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto mb-8">
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">A</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Act</span>
+                </div>
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">L</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Lead</span>
+                </div>
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">P</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Protect</span>
+                </div>
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">H</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Honor</span>
+                </div>
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">A</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Aspire</span>
+                </div>
+                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                    <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">S</span>
+                    <span class="text-sm font-semibold text-black dark:text-white">Serve</span>
+                </div>
+            </div>
+            
+            <div class="flex flex-col sm:flex-row gap-4 justify-center mb-12">
+                <a href="#about" class="bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-center">Discover Brotherhood</a>
+                <a href="/signup" class="bg-red-600 dark:bg-red-500 text-white px-8 py-4 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-xl transition-all duration-300 text-center">Join the Pack</a>
+                <a href="#contact" class="border-2 border-gray-900 dark:border-white text-gray-900 dark:text-white px-8 py-4 rounded-lg font-semibold hover:bg-gray-900 dark:hover:bg-white hover:text-white dark:hover:text-gray-900 transition-all duration-300 text-center">Contact Us</a>
+            </div>
+            
+            <!-- Crown Meaning Section -->
+            <div class="max-w-4xl mx-auto bg-white dark:bg-black border-2 border-black dark:border-white rounded-2xl p-8 shadow-xl mb-8">
+                <h3 class="text-2xl font-bold text-black dark:text-white mb-4 tracking-wide">WHAT DOES THE CROWN MEAN?</h3>
+                <blockquote class="text-xl md:text-2xl font-semibold text-red-600 dark:text-red-400 mb-4 italic">
+                    "I WEAR THIS CROWN NOT FOR POWER, BUT FOR PURPOSE"
+                </blockquote>
+                <p class="text-black dark:text-white leading-relaxed">
+                    The crown represents our commitment to leadership through service, not domination. 
+                    It symbolizes the responsibility we carry to lead with integrity, protect our brothers, 
+                    and serve our community with unwavering dedication.
+                </p>
+            </div>
+            
+            <!-- ALPHAS Slogan Section -->
+            <div class="max-w-5xl mx-auto text-center">
+                <h3 class="text-2xl font-bold text-black dark:text-white mb-6 tracking-wide uppercase">SLOGAN</h3>
+                <div class="bg-black dark:bg-white p-8 rounded-2xl shadow-2xl border-2 border-white dark:border-black">
+                    <blockquote class="text-2xl md:text-4xl font-black text-white dark:text-black leading-tight tracking-wider">
+                        "BORN TO LEAD. TRAINED TO RISE. BUILT TO SERVE."
+                    </blockquote>
+                </div>
+            </div>
+        </div>
+        <div class="flex-1 relative flex items-center justify-center">
+            <div class="w-80 h-80 bg-black dark:bg-white rounded-full opacity-10"></div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="py-20 bg-white dark:bg-black">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-5xl font-black text-center mb-16 text-black dark:text-white tracking-wider">About ALPHAS</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
+                <div class="lg:col-span-2 space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Our Foundation</h3>
+                        <p class="text-black dark:text-white leading-relaxed">Founded in 2025 by Melati Achuma Hlakula at Rhodes University, South Africa, ALPHAS represents the pinnacle of male leadership and brotherhood.</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-black dark:text-white">Our Mission</h3>
+                        <p class="text-black dark:text-white leading-relaxed">To cultivate exceptional young men who embody the values of leadership, integrity, strength, and brotherhood. We forge bonds that last a lifetime while developing the skills necessary to lead in an ever-changing world.</p>
+                    </div>
+                    
+                    <div>
+                        <h3 class="text-2xl font-bold mb-6 text-black dark:text-white">Core Values</h3>
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-dumbbell text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">DISCIPLINE</h4>
+                                <p class="text-black dark:text-white">Unwavering commitment to self-control and excellence</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-shield-alt text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">INTEGRITY</h4>
+                                <p class="text-black dark:text-white">Unwavering commitment to truth and honor</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-handshake text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">BROTHERHOOD</h4>
+                                <p class="text-black dark:text-white">Unbreakable bonds of loyalty and mutual support</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-eye text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">VISION</h4>
+                                <p class="text-black dark:text-white">Clear purpose and forward-thinking leadership</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-balance-scale text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">ACCOUNTABILITY</h4>
+                                <p class="text-black dark:text-white">Taking responsibility for our actions and decisions</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                                <i class="fas fa-hands-helping text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">SERVICE</h4>
+                                <p class="text-black dark:text-white">Dedication to helping others and our community</p>
+                            </div>
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center md:col-span-2 lg:col-span-1">
+                                <i class="fas fa-seedling text-4xl text-red-600 dark:text-red-400 mb-4"></i>
+                                <h4 class="text-xl font-bold mb-2 text-black dark:text-white">GROWTH</h4>
+                                <p class="text-black dark:text-white">Continuous improvement and personal development</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 text-center shadow-xl">
+                    <div class="w-20 h-20 bg-red-600 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <i class="fas fa-user-graduate text-3xl text-white"></i>
+                    </div>
+                    <h3 class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Melati Achuma Hlakula</h3>
+                    <p class="text-red-600 dark:text-red-400 font-semibold mb-2">Founder & Visionary</p>
+                    <p class="text-gray-600 dark:text-gray-400 mb-1">Rhodes University Student</p>
+                    <p class="text-gray-600 dark:text-gray-400">South Africa, 2025</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Pillars Section -->
+    <section id="pillars" class="py-20 bg-black dark:bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-5xl font-black text-center mb-16 text-gray-900 dark:text-white tracking-wider">Core Pillars</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
+                <div class="lg:col-span-2 space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">The Foundation of Excellence</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">ALPHAS is built upon three fundamental pillars that define our character and guide our actions. These principles are not just words - they are the essence of who we are and what we strive to become.</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:translate-x-2 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:shadow-xl flex items-start gap-6">
+                            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-dumbbell text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black mb-2 text-gray-900 dark:text-white tracking-wider">DISCIPLINE</h4>
+                                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">The unwavering commitment to self-control, consistency, and excellence in all aspects of life. We train our minds and bodies to achieve peak performance through rigorous practice and dedication.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:translate-x-2 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:shadow-xl flex items-start gap-6">
+                            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-crown text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black mb-2 text-gray-900 dark:text-white tracking-wider">LEADERSHIP</h4>
+                                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">The ability to inspire, guide, and empower others to reach their full potential. We lead by example, demonstrating integrity, courage, and vision in everything we do.</p>
+                            </div>
+                        </div>
+                        <div class="bg-white dark:bg-gray-800 p-6 rounded-xl border border-gray-200 dark:border-gray-700 hover:translate-x-2 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:shadow-xl flex items-start gap-6">
+                            <div class="w-16 h-16 bg-red-600 rounded-full flex items-center justify-center flex-shrink-0">
+                                <i class="fas fa-hands-helping text-2xl text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="text-2xl font-black mb-2 text-gray-900 dark:text-white tracking-wider">SERVICE</h4>
+                                <p class="text-gray-600 dark:text-gray-400 leading-relaxed">The commitment to giving back to our community and supporting those in need. We use our skills, resources, and influence to create positive change in the world around us.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex justify-center items-center">
+                    <div class="relative w-64 h-64">
+                        <div class="absolute top-0 left-1/2 transform -translate-x-1/2 w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-3xl font-black text-white hover:scale-110 transition-all duration-300 shadow-xl">
+                            D
+                        </div>
+                        <div class="absolute bottom-8 left-8 w-20 h-20 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center text-3xl font-black text-gray-100 dark:text-gray-900 hover:scale-110 transition-all duration-300 shadow-xl">
+                            L
+                        </div>
+                        <div class="absolute bottom-8 right-8 w-20 h-20 bg-red-600 rounded-full flex items-center justify-center text-3xl font-black text-white hover:scale-110 transition-all duration-300 shadow-xl">
+                            S
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ALPHAS Pledge Section -->
+    <section class="py-20 bg-black dark:bg-white">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-5xl font-black text-white dark:text-black tracking-wider mb-4">PLEDGE</h2>
+                <div class="w-24 h-1 bg-white dark:bg-black mx-auto"></div>
+            </div>
+            
+            <div class="relative">
+                <!-- Split background effect -->
+                <div class="absolute inset-0 bg-white dark:bg-black rounded-3xl border-2 border-white dark:border-black"></div>
+                
+                <!-- Pledge content -->
+                <div class="relative z-10 p-12 text-center">
+                    <div class="max-w-4xl mx-auto">
+                        <blockquote class="text-2xl md:text-3xl lg:text-4xl font-bold text-black dark:text-white leading-relaxed tracking-wide">
+                            "I STAND WITH PURPOSE. I ACT<br>
+                            WITH DISCIPLINE. I SPEAK WITH<br>
+                            INTENTION. I GROW THROUGH<br>
+                            CHALLENGE. I SERVE WITH<br>
+                            HEART. I AM NOT LED BY<br>
+                            TREND, FEAR, OR EGO.<br>
+                            I AM AN ALPHA, BUILT FOR<br>
+                            MORE."
+                        </blockquote>
+                    </div>
+                </div>
+                
+                <!-- Decorative elements -->
+                <div class="absolute top-0 left-0 w-full h-full">
+                    <div class="absolute top-4 left-4 w-16 h-16 border-2 border-white dark:border-black rounded-full opacity-30"></div>
+                    <div class="absolute bottom-4 right-4 w-12 h-12 border-2 border-white dark:border-black rounded-full opacity-30"></div>
+                    <div class="absolute top-1/2 left-8 w-8 h-8 border-2 border-white dark:border-black rounded-full opacity-40"></div>
+                    <div class="absolute top-1/2 right-8 w-8 h-8 border-2 border-white dark:border-black rounded-full opacity-40"></div>
+                </div>
+            </div>
+            
+            <!-- Pledge explanation -->
+            <div class="text-center mt-12">
+                <p class="text-lg text-white dark:text-black max-w-3xl mx-auto leading-relaxed">
+                    This pledge represents the commitment every ALPHA makes to embody the highest standards of character, 
+                    leadership, and service. It's not just words—it's a way of life.
+                </p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="py-20 bg-white dark:bg-black">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h2 class="text-5xl font-black text-center mb-16 text-gray-900 dark:text-white tracking-wider">Join the Pack</h2>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+                <div class="space-y-8">
+                    <div>
+                        <h3 class="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Get in Touch</h3>
+                        <p class="text-gray-700 dark:text-gray-300 leading-relaxed">Ready to become part of something greater? Reach out to us and take the first step toward brotherhood.</p>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-phone text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Phone</h4>
+                                <p class="text-gray-600 dark:text-gray-400">+27 65 564 2698</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-envelope text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Email</h4>
+                                <p class="text-gray-600 dark:text-gray-400">hlakulaachuma@icloud.com</p>
+                            </div>
+                        </div>
+                        <div class="flex items-center gap-4">
+                            <div class="w-12 h-12 bg-red-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-map-marker-alt text-white"></i>
+                            </div>
+                            <div>
+                                <h4 class="font-semibold text-gray-900 dark:text-white">Location</h4>
+                                <p class="text-gray-600 dark:text-gray-400">Rhodes University, South Africa</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                 <form id="contactForm" class="contact-form bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl" method="POST">
+                    <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Send Us a Message</h3>
+                    <div class="space-y-4">
+                        <input type="text" id="name" name="name" placeholder="Your Name" required 
+                               class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300">
+                        <input type="email" id="email" name="email" placeholder="Your Email" required 
+                               class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300">
+                        <input type="tel" id="phone" name="phone" placeholder="Your Phone Number" 
+                               class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300">
+                        <textarea id="message" name="message" placeholder="Your Message" rows="5" required 
+                                  class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300 resize-none"></textarea>
+                    </div>
+                    <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-xl transition-all duration-300 mt-6">Send Message</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-black dark:bg-white border-t border-white dark:border-black py-12">
+        <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
+                <div class="flex items-center space-x-3">
+                    <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-8 h-8 rounded-lg object-cover">
+                    <span class="text-xl font-bold text-gray-900 dark:text-white">ALPHAS</span>
+                </div>
+                <div class="flex flex-col space-y-2">
+                    <a href="#home" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Home</a>
+                    <a href="#about" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">About</a>
+                    <a href="#pillars" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Core Pillars</a>
+                    <a href="#contact" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Contact</a>
+                </div>
+                <div class="flex space-x-4">
+                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+                        <i class="fab fa-facebook"></i>
+                    </a>
+                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                </div>
+            </div>
+            <div class="text-center pt-8 border-t border-white dark:border-black">
+                <p class="text-white dark:text-black">&copy; 2025 ALPHAS Fraternity. Founded by Melati Achuma Hlakula. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="theme.js"></script>
+    <script src="script.js"></script>
+</body>
+</html> 

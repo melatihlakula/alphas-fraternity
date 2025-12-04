@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - ALPHAS Fraternity Contact Submissions</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    fontFamily: {
+                        'inter': ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        .animate-spin {
+            animation: spin 1s linear infinite;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 dark:bg-gray-900">
+    <div class="container mx-auto px-4 py-8">
+        <div class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-6">
+            <div class="flex justify-between items-center mb-6">
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">Admin Dashboard</h1>
+                <div class="flex items-center gap-4">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">
+                        Logged in as: <span id="currentUser" class="font-semibold">Loading...</span>
+                    </div>
+                    <button class="w-10 h-10 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300" id="themeToggle">
+                        <i class="fas fa-moon"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div id="errorMessage" class="hidden bg-red-100 dark:bg-red-900 border border-red-400 dark:border-red-700 text-red-700 dark:text-red-200 px-4 py-3 rounded mb-4"></div>
+
+            <!-- Tabs -->
+            <div class="mb-6 border-b border-gray-200 dark:border-gray-700">
+                <div class="flex space-x-4">
+                    <button onclick="showTab('contacts')" id="tab-contacts" class="px-4 py-2 font-semibold text-gray-900 dark:text-white border-b-2 border-red-600">Contact Submissions</button>
+                    <button onclick="showTab('team')" id="tab-team" class="px-4 py-2 font-semibold text-gray-600 dark:text-gray-400 hover:text-gray-900 dark:hover:text-white">Team Members</button>
+                </div>
+            </div>
+            
+            <!-- Contacts Tab Content -->
+            <div id="contacts-tab">
+            <!-- Statistics -->
+            <div id="stats" class="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+                <div class="bg-blue-50 dark:bg-blue-900/30 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Total Submissions</div>
+                    <div id="statTotal" class="text-2xl font-bold text-blue-600 dark:text-blue-400">0</div>
+                </div>
+                <div class="bg-green-50 dark:bg-green-900/30 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">Today</div>
+                    <div id="statToday" class="text-2xl font-bold text-green-600 dark:text-green-400">0</div>
+                </div>
+                <div class="bg-yellow-50 dark:bg-yellow-900/30 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">This Week</div>
+                    <div id="statWeek" class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">0</div>
+                </div>
+                <div class="bg-purple-50 dark:bg-purple-900/30 p-4 rounded-lg">
+                    <div class="text-sm text-gray-600 dark:text-gray-400">This Month</div>
+                    <div id="statMonth" class="text-2xl font-bold text-purple-600 dark:text-purple-400">0</div>
+                </div>
+            </div>
+            
+            <!-- Contacts Table -->
+            <div class="overflow-x-auto">
+                <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                    <thead class="bg-gray-800 dark:bg-gray-900 text-white">
+                        <tr>
+                            <th class="px-4 py-3 text-left">ID</th>
+                            <th class="px-4 py-3 text-left">Name</th>
+                            <th class="px-4 py-3 text-left">Email</th>
+                            <th class="px-4 py-3 text-left">Phone</th>
+                            <th class="px-4 py-3 text-left">Message</th>
+                            <th class="px-4 py-3 text-left">Date</th>
+                        </tr>
+                    </thead>
+                    <tbody id="contactsTable">
+                        <tr>
+                            <td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                <div class="flex items-center justify-center">
+                                    <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mr-3"></div>
+                                    Loading contacts...
+                                </div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            </div>
+
+            <!-- Team Members Tab Content -->
+            <div id="team-tab" class="hidden">
+                <div class="mb-4">
+                    <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-4">Team Members</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">All team members who can access the admin panel</p>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
+                        <thead class="bg-gray-800 dark:bg-gray-900 text-white">
+                            <tr>
+                                <th class="px-4 py-3 text-left">ID</th>
+                                <th class="px-4 py-3 text-left">Username</th>
+                                <th class="px-4 py-3 text-left">Email</th>
+                                <th class="px-4 py-3 text-left">Role</th>
+                                <th class="px-4 py-3 text-left">Joined</th>
+                                <th class="px-4 py-3 text-left">Last Login</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teamTable">
+                            <tr>
+                                <td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
+                                    <div class="flex items-center justify-center">
+                                        <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-gray-900 dark:border-white mr-3"></div>
+                                        Loading team members...
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <div class="mt-6 flex justify-between items-center">
+                <a href="/" class="text-blue-600 dark:text-blue-400 hover:underline">← Back to Website</a>
+                <button onclick="logout()" class="text-red-600 dark:text-red-400 hover:underline">Logout</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="theme.js"></script>
+    <script>
+        // Check authentication first
+        const sessionId = localStorage.getItem('sessionId');
+        
+        if (!sessionId) {
+            window.location.href = '/login';
+        }
+
+        // Verify session on load
+        async function verifyAuth() {
+            try {
+                if (!sessionId) {
+                    return false;
+                }
+
+                const response = await fetch('/api/auth/verify', {
+                    method: 'GET',
+                    headers: {
+                        'X-Session-Id': sessionId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('sessionId');
+                        window.location.href = '/login';
+                        return false;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+                
+                if (!result.success) {
+                    localStorage.removeItem('sessionId');
+                    window.location.href = '/login';
+                    return false;
+                }
+                return true;
+            } catch (error) {
+                console.error('Auth verification error:', error);
+                localStorage.removeItem('sessionId');
+                window.location.href = '/login';
+                return false;
+            }
+        }
+
+        async function loadContacts() {
+            // Verify auth before loading
+            const isAuthenticated = await verifyAuth();
+            if (!isAuthenticated) {
+                showError('Authentication failed. Redirecting to login...');
+                return;
+            }
+
+            try {
+                const response = await fetch('/api/admin/contacts', {
+                    method: 'GET',
+                    headers: {
+                        'X-Session-Id': sessionId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    if (response.status === 401) {
+                        localStorage.removeItem('sessionId');
+                        window.location.href = '/login';
+                        return;
+                    }
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    // Hide error message
+                    document.getElementById('errorMessage').classList.add('hidden');
+
+                    // Update statistics
+                    document.getElementById('statTotal').textContent = data.stats.total || 0;
+                    document.getElementById('statToday').textContent = data.stats.today || 0;
+                    document.getElementById('statWeek').textContent = data.stats.thisWeek || 0;
+                    document.getElementById('statMonth').textContent = data.stats.thisMonth || 0;
+
+                    // Update table
+                    const tbody = document.getElementById('contactsTable');
+                    if (!data.contacts || data.contacts.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">No contact submissions yet.</td></tr>';
+                    } else {
+                        tbody.innerHTML = data.contacts.map(contact => `
+                            <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-4 py-3 text-gray-900 dark:text-white">${contact.id || 'N/A'}</td>
+                                <td class="px-4 py-3 font-semibold text-gray-900 dark:text-white">${escapeHtml(contact.name || 'N/A')}</td>
+                                <td class="px-4 py-3">
+                                    <a href="mailto:${escapeHtml(contact.email || '')}" class="text-blue-600 dark:text-blue-400 hover:underline">
+                                        ${escapeHtml(contact.email || 'N/A')}
+                                    </a>
+                                </td>
+                                <td class="px-4 py-3 text-gray-900 dark:text-white">${contact.phone ? escapeHtml(contact.phone) : 'N/A'}</td>
+                                <td class="px-4 py-3">
+                                    <div class="max-w-xs truncate text-gray-900 dark:text-white" title="${escapeHtml(contact.message || '')}">
+                                        ${escapeHtml((contact.message || '').substring(0, 50))}${(contact.message || '').length > 50 ? '...' : ''}
+                                    </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                                    ${contact.created_at ? new Date(contact.created_at).toLocaleString() : 'N/A'}
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                } else {
+                    showError(data.message || 'Failed to load contacts');
+                }
+            } catch (error) {
+                console.error('Error loading contacts:', error);
+                showError('Error loading contacts: ' + error.message + '. Please check your connection and try again.');
+            }
+        }
+
+        function showError(message) {
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.textContent = message;
+            errorDiv.classList.remove('hidden');
+        }
+
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+
+        async function logout() {
+            try {
+                await fetch('/api/auth/logout', {
+                    method: 'POST',
+                    headers: {
+                        'X-Session-Id': sessionId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+            } catch (error) {
+                console.error('Logout error:', error);
+            }
+            localStorage.removeItem('sessionId');
+            window.location.href = '/login';
+        }
+
+        // Load user info
+        async function loadUserInfo() {
+            try {
+                const response = await fetch('/api/auth/verify', {
+                    headers: {
+                        'X-Session-Id': sessionId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const result = await response.json();
+                if (result.success) {
+                    document.getElementById('currentUser').textContent = result.user.username;
+                }
+            } catch (error) {
+                console.error('Error loading user info:', error);
+            }
+        }
+
+        // Load team members
+        async function loadTeamMembers() {
+            try {
+                const response = await fetch('/api/admin/users', {
+                    headers: {
+                        'X-Session-Id': sessionId,
+                        'Content-Type': 'application/json'
+                    }
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const data = await response.json();
+
+                if (data.success) {
+                    const tbody = document.getElementById('teamTable');
+                    if (!data.users || data.users.length === 0) {
+                        tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">No team members found.</td></tr>';
+                    } else {
+                        tbody.innerHTML = data.users.map(user => `
+                            <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+                                <td class="px-4 py-3 text-gray-900 dark:text-white">${user.id || 'N/A'}</td>
+                                <td class="px-4 py-3 font-semibold text-gray-900 dark:text-white">${escapeHtml(user.username || 'N/A')}</td>
+                                <td class="px-4 py-3 text-gray-900 dark:text-white">${user.email ? escapeHtml(user.email) : 'N/A'}</td>
+                                <td class="px-4 py-3">
+                                    <span class="px-2 py-1 bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300 rounded text-sm font-semibold">
+                                        ${escapeHtml(user.role || 'admin')}
+                                    </span>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                                    ${user.created_at ? new Date(user.created_at).toLocaleDateString() : 'N/A'}
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
+                                    ${user.last_login ? new Date(user.last_login).toLocaleString() : 'Never'}
+                                </td>
+                            </tr>
+                        `).join('');
+                    }
+                } else {
+                    showError('Failed to load team members');
+                }
+            } catch (error) {
+                console.error('Error loading team members:', error);
+                showError('Error loading team members: ' + error.message);
+            }
+        }
+
+        // Tab switching
+        function showTab(tabName) {
+            // Hide all tabs
+            document.getElementById('contacts-tab').classList.add('hidden');
+            document.getElementById('team-tab').classList.add('hidden');
+            
+            // Remove active styling from all buttons
+            document.getElementById('tab-contacts').classList.remove('border-red-600', 'text-gray-900');
+            document.getElementById('tab-contacts').classList.add('text-gray-600');
+            document.getElementById('tab-team').classList.remove('border-red-600', 'text-gray-900');
+            document.getElementById('tab-team').classList.add('text-gray-600');
+            
+            // Show selected tab
+            if (tabName === 'contacts') {
+                document.getElementById('contacts-tab').classList.remove('hidden');
+                document.getElementById('tab-contacts').classList.add('border-red-600', 'text-gray-900');
+                document.getElementById('tab-contacts').classList.remove('text-gray-600');
+            } else if (tabName === 'team') {
+                document.getElementById('team-tab').classList.remove('hidden');
+                document.getElementById('tab-team').classList.add('border-red-600', 'text-gray-900');
+                document.getElementById('tab-team').classList.remove('text-gray-600');
+                loadTeamMembers();
+            }
+        }
+
+        // Load contacts on page load
+        (async () => {
+            const authenticated = await verifyAuth();
+            if (authenticated) {
+                await loadUserInfo();
+                await loadContacts();
+                // Refresh contacts every 30 seconds
+                setInterval(loadContacts, 30000);
+            } else {
+                showError('Please log in to access the admin panel.');
+            }
+        })();
+    </script>
+</body>
+</html>
+
