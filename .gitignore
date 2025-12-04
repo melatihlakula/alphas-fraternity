@@ -1,0 +1,36 @@
+# Logs
+logs/
+*.log
+
+# Database
+*.sql.bak
+*.db
+data/
+
+# Configuration (if sensitive)
+# config.php
+.env
+
+# Node.js
+node_modules/
+npm-debug.log
+package-lock.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Temporary files
+*.tmp
+*.temp
+
+# Verification script output (if any)
+verify-output.txt
+

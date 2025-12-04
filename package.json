@@ -1,0 +1,29 @@
+{
+  "name": "alphas-fraternity",
+  "version": "1.0.0",
+  "description": "ALPHAS Fraternity website backend",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "setup": "node setup.js",
+    "verify": "node verify-setup.js"
+  },
+  "keywords": [
+    "fraternity",
+    "website"
+  ],
+  "author": "Melati Achuma Hlakula",
+  "license": "MIT",
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "body-parser": "^1.20.2",
+    "cookie-parser": "^1.4.7",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "sql.js": "^1.13.0",
+    "uuid": "^9.0.1"
+  }
+}

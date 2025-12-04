@@ -1,0 +1,41 @@
+# ALPHAS Fraternity Website Configuration
+
+# Enable PHP error logging (disable display in production)
+php_flag display_errors Off
+php_flag log_errors On
+
+# Security headers
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+    Header set X-Frame-Options "SAMEORIGIN"
+    Header set X-XSS-Protection "1; mode=block"
+</IfModule>
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^(config\.php|database\.php|\.htaccess)$">
+    Order allow,deny
+    Deny from all
+</FilesMatch>
+
+# Enable compression
+<IfModule mod_deflate.c>
+    AddOutputFilterByType DEFLATE text/html text/plain text/xml text/css text/javascript application/javascript application/json
+</IfModule>
+
+# Browser caching
+<IfModule mod_expires.c>
+    ExpiresActive On
+    ExpiresByType image/jpeg "access plus 1 year"
+    ExpiresByType image/png "access plus 1 year"
+    ExpiresByType image/gif "access plus 1 year"
+    ExpiresByType text/css "access plus 1 month"
+    ExpiresByType application/javascript "access plus 1 month"
+</IfModule>
+
+# Custom error pages (optional)
+# ErrorDocument 404 /404.html
+# ErrorDocument 500 /500.html
+
