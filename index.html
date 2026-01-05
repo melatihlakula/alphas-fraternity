@@ -54,6 +54,10 @@
                         Login
                         <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
                     </a>
+                    <a href="/signup" id="signupLink" class="text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300 relative group">
+                        Sign Up
+                        <span class="absolute bottom-0 left-0 w-0 h-0.5 bg-red-600 dark:bg-red-400 transition-all duration-300 group-hover:w-full"></span>
+                    </a>
                     <button class="w-10 h-10 border-2 border-gray-300 dark:border-gray-600 text-gray-900 dark:text-white rounded-full flex items-center justify-center hover:bg-red-600 hover:border-red-600 hover:text-white transition-all duration-300" id="themeToggle">
                         <i class="fas fa-moon"></i>
                     </button>
@@ -74,6 +78,7 @@
                 <a href="#contact" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Contact</a>
                 <a href="/admin" id="mobileAdminLink" class="hidden block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Admin</a>
                 <a href="/login" id="mobileLoginLink" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Login</a>
+                <a href="/signup" id="mobileSignupLink" class="block text-gray-900 dark:text-white font-semibold hover:text-red-600 dark:hover:text-red-400 transition-colors duration-300">Sign Up</a>
             </div>
         </div>
     </nav>
@@ -367,7 +372,12 @@
                     </div>
                 </div>
                 
-                 <form id="contactForm" class="contact-form bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl" method="POST">
+                <form id="contactForm" class="contact-form bg-white dark:bg-gray-800 p-8 rounded-2xl border border-gray-200 dark:border-gray-700 shadow-xl" method="POST" data-ajax="true" novalidate>
+                    <!-- status message area (added) -->
+                    <div id="formStatus" role="status" aria-live="polite" class="hidden mb-4 rounded-md px-4 py-3 text-sm">
+                        <!-- dynamically filled by script.js -->
+                    </div>
+
                     <h3 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Send Us a Message</h3>
                     <div class="space-y-4">
                         <input type="text" id="name" name="name" placeholder="Your Name" required 
@@ -378,8 +388,11 @@
                                class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300">
                         <textarea id="message" name="message" placeholder="Your Message" rows="5" required 
                                   class="w-full px-4 py-3 border-2 border-gray-200 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:border-red-500 dark:focus:border-red-400 focus:outline-none transition-colors duration-300 resize-none"></textarea>
+
+                        <!-- honeypot to deter bots (should remain blank) -->
+                        <input type="text" id="website" name="website" class="sr-only" tabindex="-1" autocomplete="off" />
                     </div>
-                    <button type="submit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-xl transition-all duration-300 mt-6">Send Message</button>
+                    <button type="submit" id="contactSubmit" class="w-full bg-gray-900 dark:bg-white text-white dark:text-gray-900 px-8 py-4 rounded-lg font-semibold hover:-translate-y-1 hover:shadow-xl transition-all duration-300 mt-6">Send Message</button>
                 </form>
             </div>
         </div>
@@ -389,35 +402,7 @@
     <footer class="bg-black dark:bg-white border-t border-white dark:border-black py-12">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 mb-8">
-                <div class="flex items-center space-x-3">
-                    <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-8 h-8 rounded-lg object-cover">
-                    <span class="text-xl font-bold text-gray-900 dark:text-white">ALPHAS</span>
-                </div>
-                <div class="flex flex-col space-y-2">
-                    <a href="#home" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Home</a>
-                    <a href="#about" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">About</a>
-                    <a href="#pillars" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Core Pillars</a>
-                    <a href="#contact" class="text-white dark:text-black hover:text-red-400 dark:hover:text-red-600 transition-colors duration-300">Contact</a>
-                </div>
-                <div class="flex space-x-4">
-                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
-                        <i class="fab fa-facebook"></i>
-                    </a>
-                    <a href="#" class="w-10 h-10 bg-gray-900 dark:bg-white text-white dark:text-gray-900 rounded-full flex items-center justify-center hover:bg-red-600 dark:hover:bg-red-600 hover:text-white transition-all duration-300 hover:-translate-y-1">
-                        <i class="fab fa-twitter"></i>
-                    </a>
-                </div>
-            </div>
-            <div class="text-center pt-8 border-t border-white dark:border-black">
-                <p class="text-white dark:text-black">&copy; 2025 ALPHAS Fraternity. Founded by Melati Achuma Hlakula. All rights reserved.</p>
-            </div>
-        </div>
-    </footer>
-
-    <script src="theme.js"></script>
-    <script src="script.js"></script>
-</body>
-</html> 
+                <div class="flex items-center space-x-4">
+                    <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-12 h-12 rounded-lg object-cover">
+                    <div>
+                        <p class="text-white
