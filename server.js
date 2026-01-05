@@ -26,13 +26,30 @@ app.set('trust proxy', 1);
 
 // Security middlewares
 app.use(helmet({
-  // basic CSP to allow required resources (adjust if you load external scripts)
+  // CSP configured to allow Tailwind CDN and all required resources
   contentSecurityPolicy: {
     directives: {
       defaultSrc: ["'self'"],
-      scriptSrc: ["'self'", "https://cdn.tailwindcss.com", "https://fonts.googleapis.com", "https://cdnjs.cloudflare.com"],
-      styleSrc: ["'self'", "https://fonts.googleapis.com", "'unsafe-inline'", "https://cdnjs.cloudflare.com"],
-      imgSrc: ["'self'", "data:"],
+      scriptSrc: [
+        "'self'", 
+        "'unsafe-inline'", // Needed for Tailwind config
+        "https://cdn.tailwindcss.com", 
+        "https://fonts.googleapis.com", 
+        "https://cdnjs.cloudflare.com"
+      ],
+      styleSrc: [
+        "'self'", 
+        "'unsafe-inline'", // Needed for Tailwind generated styles
+        "https://fonts.googleapis.com", 
+        "https://cdnjs.cloudflare.com",
+        "https://cdn.tailwindcss.com"
+      ],
+      fontSrc: [
+        "'self'",
+        "https://fonts.gstatic.com",
+        "https://cdnjs.cloudflare.com"
+      ],
+      imgSrc: ["'self'", "data:", "https:"],
       connectSrc: ["'self'"],
     }
   }
