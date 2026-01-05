@@ -40,22 +40,27 @@ app.use(helmet({
 // CORS configuration - production ready
 const allowedOrigins = process.env.ALLOWED_ORIGIN 
   ? process.env.ALLOWED_ORIGIN.split(',').map(origin => origin.trim())
-  : (process.env.NODE_ENV === 'production' ? [] : true); // Allow all in dev, restrict in prod
+  : [];
 
 app.use(cors({
   origin: (origin, callback) => {
-    // Allow requests with no origin (mobile apps, Postman, etc.) in development
-    if (!origin && process.env.NODE_ENV !== 'production') {
+    // Allow requests with no origin (mobile apps, Postman, etc.)
+    if (!origin) {
       return callback(null, true);
     }
-    // In production, require specific origins
-    if (process.env.NODE_ENV === 'production' && Array.isArray(allowedOrigins)) {
-      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+    
+    // If ALLOWED_ORIGIN is set, check against it
+    if (allowedOrigins.length > 0) {
+      if (allowedOrigins.includes(origin)) {
         callback(null, true);
       } else {
+        // Log for debugging
+        console.log(`CORS blocked origin: ${origin}, allowed: ${allowedOrigins.join(', ')}`);
         callback(new Error('Not allowed by CORS'));
       }
     } else {
+      // If ALLOWED_ORIGIN not set, allow all origins (for initial setup)
+      console.warn('⚠ ALLOWED_ORIGIN not set - allowing all origins. Set ALLOWED_ORIGIN in Railway variables for security.');
       callback(null, true);
     }
   },
@@ -96,12 +101,13 @@ if (process.env.SMTP_HOST && process.env.SMTP_USER && process.env.SMTP_PASS) {
       socketTimeout: 10000
     });
     
-    // Verify transporter connection
+    // Verify transporter connection (with timeout)
     transporter.verify().then(() => {
       console.log('✓ Email transporter configured and verified');
     }).catch((err) => {
-      console.error('⚠ Email transporter verification failed:', err.message);
+      console.warn('⚠ Email transporter verification failed:', err.message);
       console.warn('Email notifications may not work. Please check your SMTP settings.');
+      console.warn('This is a warning - email will still attempt to send when needed.');
     });
   } catch (err) {
     console.error('Failed to create email transporter:', err.message);
