@@ -10,7 +10,11 @@ const path = require('path');
 class DatabaseManager {
   constructor() {
     this.db = null;
-    this.dbPath = path.join(__dirname, 'data', 'alphas.db');
+    // Use Railway's persistent volume or local data directory
+    const dataDir = process.env.RAILWAY_VOLUME_MOUNT_PATH 
+      ? process.env.RAILWAY_VOLUME_MOUNT_PATH 
+      : path.join(__dirname, 'data');
+    this.dbPath = path.join(dataDir, 'alphas.db');
     this.SQL = null;
   }
 
@@ -24,18 +28,25 @@ class DatabaseManager {
     await this.init();
     
     if (!this.db) {
-      // Create data directory if it doesn't exist
-      const dataDir = path.dirname(this.dbPath);
-      if (!fs.existsSync(dataDir)) {
-        fs.mkdirSync(dataDir, { recursive: true });
-      }
+      try {
+        // Create data directory if it doesn't exist
+        const dataDir = path.dirname(this.dbPath);
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir, { recursive: true });
+        }
 
-      // Load existing database or create new one
-      if (fs.existsSync(this.dbPath)) {
-        const buffer = fs.readFileSync(this.dbPath);
-        this.db = new this.SQL.Database(buffer);
-      } else {
+        // Load existing database or create new one
+        if (fs.existsSync(this.dbPath)) {
+          const buffer = fs.readFileSync(this.dbPath);
+          this.db = new this.SQL.Database(buffer);
+        } else {
+          this.db = new this.SQL.Database();
+        }
+      } catch (error) {
+        console.error('Database connection error:', error);
+        // Fallback to in-memory database if file system fails
         this.db = new this.SQL.Database();
+        console.warn('⚠ Using in-memory database (data will not persist)');
       }
     }
     return this.db;
@@ -116,9 +127,19 @@ class DatabaseManager {
 
   save() {
     if (this.db) {
-      const data = this.db.export();
-      const buffer = Buffer.from(data);
-      fs.writeFileSync(this.dbPath, buffer);
+      try {
+        const data = this.db.export();
+        const buffer = Buffer.from(data);
+        // Ensure directory exists before writing
+        const dataDir = path.dirname(this.dbPath);
+        if (!fs.existsSync(dataDir)) {
+          fs.mkdirSync(dataDir, { recursive: true });
+        }
+        fs.writeFileSync(this.dbPath, buffer);
+      } catch (error) {
+        console.error('Database save error:', error);
+        // Continue even if save fails (using in-memory DB)
+      }
     }
   }
 
