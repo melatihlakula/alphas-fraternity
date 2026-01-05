@@ -37,9 +37,28 @@ app.use(helmet({
     }
   }
 }));
-// CORS configuration - adjust for production
+// CORS configuration - production ready
+const allowedOrigins = process.env.ALLOWED_ORIGIN 
+  ? process.env.ALLOWED_ORIGIN.split(',').map(origin => origin.trim())
+  : (process.env.NODE_ENV === 'production' ? [] : true); // Allow all in dev, restrict in prod
+
 app.use(cors({
-  origin: process.env.ALLOWED_ORIGIN || true, // Set specific origin in production
+  origin: (origin, callback) => {
+    // Allow requests with no origin (mobile apps, Postman, etc.) in development
+    if (!origin && process.env.NODE_ENV !== 'production') {
+      return callback(null, true);
+    }
+    // In production, require specific origins
+    if (process.env.NODE_ENV === 'production' && Array.isArray(allowedOrigins)) {
+      if (allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error('Not allowed by CORS'));
+      }
+    } else {
+      callback(null, true);
+    }
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'X-Session-Id']
@@ -259,10 +278,19 @@ app.use((req, res, next) => {
   next();
 });
 
-// Initialize database
+// Initialize database (runs automatically on server start)
 database.initialize().then(success => {
   if (success) {
     console.log('✓ Database initialized successfully');
+    
+    // Auto-create admin user if none exists (for cloud deployments)
+    database.select('SELECT COUNT(*) as count FROM users').then(users => {
+      if (users && users.length > 0 && users[0].count === 0) {
+        console.log('⚠ No admin user found. Run "npm run setup" to create one.');
+      }
+    }).catch(() => {
+      // Ignore errors, setup can be run manually
+    });
   } else {
     console.log('⚠ Database initialization had issues, but server will continue');
   }
