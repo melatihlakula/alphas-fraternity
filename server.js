@@ -33,24 +33,28 @@ app.use(helmet({
       scriptSrc: [
         "'self'", 
         "'unsafe-inline'", // Needed for Tailwind config
+        "'unsafe-eval'", // Tailwind CDN needs eval
         "https://cdn.tailwindcss.com", 
         "https://fonts.googleapis.com", 
-        "https://cdnjs.cloudflare.com"
+        "https://cdnjs.cloudflare.com",
+        "https://cdn.jsdelivr.net"
       ],
       styleSrc: [
         "'self'", 
         "'unsafe-inline'", // Needed for Tailwind generated styles
         "https://fonts.googleapis.com", 
         "https://cdnjs.cloudflare.com",
-        "https://cdn.tailwindcss.com"
+        "https://cdn.tailwindcss.com",
+        "https://cdn.jsdelivr.net"
       ],
       fontSrc: [
         "'self'",
         "https://fonts.gstatic.com",
-        "https://cdnjs.cloudflare.com"
+        "https://cdnjs.cloudflare.com",
+        "data:"
       ],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'"],
+      imgSrc: ["'self'", "data:", "https:", "http:"],
+      connectSrc: ["'self'", "https://cdn.tailwindcss.com"],
     }
   }
 }));
