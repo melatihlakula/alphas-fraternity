@@ -92,16 +92,34 @@ class NavigationManager {
     }
 }
 
+// --- Added: centralized API base (forces localhost to use port 3000) ---
+const API_BASE = (() => {
+    const isLocalhost = ['localhost', '127.0.0.1'].includes(window.location.hostname);
+    if (isLocalhost) {
+        return `${window.location.protocol}//${window.location.hostname}:3000`;
+    }
+    return window.location.origin;
+})();
+function apiUrl(path) {
+    // Ensure path starts with a slash
+    return `${API_BASE}${path.startsWith('/') ? path : '/' + path}`;
+}
+// --- end added ---
+
 // Form Management
 class FormManager {
     constructor() {
         this.contactForm = document.querySelector('#contactForm') || document.querySelector('.contact-form');
+        this.formStatus = document.getElementById('formStatus'); // optional status element
         this.init();
     }
 
     init() {
         if (this.contactForm) {
-            this.contactForm.addEventListener('submit', (e) => this.handleSubmit(e));
+            // Ensure only one listener is attached
+            this.contactForm.removeEventListener('submit', this.handleSubmitBound);
+            this.handleSubmitBound = (e) => this.handleSubmit(e);
+            this.contactForm.addEventListener('submit', this.handleSubmitBound);
         }
     }
 
@@ -112,44 +130,87 @@ class FormManager {
         
         // Show loading state
         const submitBtn = this.contactForm.querySelector('button[type="submit"]');
-        const originalText = submitBtn.textContent;
-        submitBtn.textContent = 'Sending...';
-        submitBtn.disabled = true;
-        
+        const originalText = submitBtn ? submitBtn.textContent : '';
+        if (submitBtn) {
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+        }
+
+        // Optional: update #formStatus element if present
+        const setFormStatus = (text, type = 'info') => {
+            if (!this.formStatus) return;
+            this.formStatus.className = 'mb-4 rounded-md px-4 py-3 text-sm';
+            if (type === 'success') {
+                this.formStatus.classList.add('bg-green-100', 'text-green-800');
+            } else if (type === 'error') {
+                this.formStatus.classList.add('bg-red-100', 'text-red-800');
+            } else {
+                this.formStatus.classList.add('bg-yellow-100', 'text-yellow-800');
+            }
+            this.formStatus.textContent = text;
+        };
+
         try {
-            // Submit to Node.js API
-            const response = await fetch('/api/contact', {
+            // Submit to Node.js API using centralized apiUrl and retry helper
+            const payload = {
+                name: formData.get('name'),
+                email: formData.get('email'),
+                phone: formData.get('phone'),
+                message: formData.get('message')
+            };
+
+            setFormStatus('Sending message...', 'info');
+
+            // Include honeypot field
+            payload.website = formData.get('website') || '';
+
+            const response = await Utils.fetchWithRetry(apiUrl('/api/contact'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({
-                    name: formData.get('name'),
-                    email: formData.get('email'),
-                    phone: formData.get('phone'),
-                    message: formData.get('message')
-                })
-            });
-            
-            const result = await response.json();
-            
-            if (result.success) {
+                body: JSON.stringify(payload)
+            }, 3, 500);
+
+            // If fetchWithRetry returned a Response object, parse and handle it.
+            let result = {};
+            try {
+                result = await response.json();
+            } catch (err) {
+                // Non-JSON or empty response
+                result = { success: response.ok, message: response.statusText || 'Unexpected response' };
+            }
+
+            if (result.success || (response && response.ok)) {
                 // Show success message
-                this.showMessage(result.message || 'Message sent successfully! We\'ll get back to you soon.', 'success');
+                const successMsg = result.message || 'Message sent successfully! We\'ll get back to you soon.';
+                this.showMessage(successMsg, 'success');
+                setFormStatus(successMsg, 'success');
                 this.contactForm.reset();
             } else {
-                // Show error message
-                this.showMessage(result.message || 'Failed to send message. Please try again.', 'error');
+                // Show error message (server responded with success:false)
+                const errorMsg = result.error || result.message || 'Failed to send message. Please try again.';
+                this.showMessage(errorMsg, 'error');
+                setFormStatus(errorMsg, 'error');
             }
             
         } catch (error) {
             console.error('Form submission error:', error);
-            // Show error message
+            // Show error message and allow retry by user
             this.showMessage('Failed to send message. Please check your connection and try again.', 'error');
+            setFormStatus('Network error. Please try again.', 'error');
         } finally {
             // Reset button state
-            submitBtn.textContent = originalText;
-            submitBtn.disabled = false;
+            if (submitBtn) {
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+            // Auto-clear status after a short delay
+            if (this.formStatus) {
+                setTimeout(() => {
+                    if (this.formStatus) this.formStatus.textContent = '';
+                }, 5000);
+            }
         }
     }
 
@@ -263,6 +324,31 @@ class Utils {
             }
         }
     }
+
+    // --- added: robust fetch with retry + exponential backoff ---
+    static async fetchWithRetry(url, options = {}, retries = 3, backoff = 500) {
+        for (let attempt = 0; attempt <= retries; attempt++) {
+            try {
+                const resp = await fetch(url, options);
+                // If server returned 429 (rate limit), honor Retry-After if provided
+                if (resp.status === 429) {
+                    const retryAfter = resp.headers.get('Retry-After');
+                    const waitMs = retryAfter ? parseInt(retryAfter, 10) * 1000 : backoff * Math.pow(2, attempt);
+                    if (attempt === retries) return resp; // return final response
+                    await new Promise(r => setTimeout(r, waitMs));
+                    continue;
+                }
+                // For other non-2xx responses, return response so caller can inspect JSON/status
+                return resp;
+            } catch (err) {
+                // Network error: retry unless out of attempts
+                if (attempt === retries) throw err;
+                const waitMs = backoff * Math.pow(2, attempt);
+                await new Promise(r => setTimeout(r, waitMs));
+            }
+        }
+    }
+    // --- end added ---
 }
 
 // Authentication Check for Navigation
@@ -277,7 +363,7 @@ class AuthNavManager {
         
         if (sessionId) {
             try {
-                const response = await fetch('/api/auth/verify', {
+                const response = await fetch(apiUrl('/api/auth/verify'), {
                     headers: {
                         'X-Session-Id': sessionId,
                         'Content-Type': 'application/json'
@@ -382,101 +468,134 @@ document.addEventListener('DOMContentLoaded', () => {
     setupInteractiveFeatures();
 });
 
-function setupInteractiveFeatures() {
-    // Add hover effects to value items
-    const valueItems = document.querySelectorAll('.value-item');
-    valueItems.forEach(item => {
-        item.addEventListener('mouseenter', () => {
-            item.style.transform = 'translateY(-10px) scale(1.02)';
-        });
-        
-        item.addEventListener('mouseleave', () => {
-            item.style.transform = 'translateY(0) scale(1)';
-        });
-    });
-    
-    // Add typing effect to hero title
-    const heroTitle = document.querySelector('.hero-title');
-    if (heroTitle) {
-        const text = heroTitle.textContent;
-        heroTitle.textContent = '';
-        
-        let i = 0;
-        const typeWriter = () => {
-            if (i < text.length) {
-                heroTitle.textContent += text.charAt(i);
-                i++;
-                setTimeout(typeWriter, 100);
-            }
-        };
-        
-        // Start typing effect after a short delay
-        setTimeout(typeWriter, 500);
-    }
-    
-    // Add scroll-triggered animations
-    const scrollElements = document.querySelectorAll('.section-title, .about-text, .brotherhood-text');
-    scrollElements.forEach(element => {
-        element.style.opacity = '0';
-        element.style.transform = 'translateY(30px)';
-        element.style.transition = 'all 0.8s ease';
-    });
-    
-    const scrollObserver = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.style.opacity = '1';
-                entry.target.style.transform = 'translateY(0)';
-            }
-        });
-    }, { threshold: 0.3 });
-    
-    scrollElements.forEach(element => scrollObserver.observe(element));
-}
+(function () {
+  'use strict';
 
-// Add CSS for animations
-const style = document.createElement('style');
-style.textContent = `
-    .animate-in {
-        animation: slideInUp 0.8s ease forwards;
+  function qs(sel, ctx) { return (ctx || document).querySelector(sel); }
+  function qsa(sel, ctx) { return Array.from((ctx || document).querySelectorAll(sel)); }
+
+  function showStatus(message, type = 'error', container = null) {
+    // container element (if not provided, try to find #formStatus)
+    var el = container || qs('#formStatus');
+    if (!el) {
+      // create a small status bar at top of body if none exists
+      el = document.createElement('div');
+      el.id = 'formStatus';
+      el.setAttribute('role', 'status');
+      el.setAttribute('aria-live', 'polite');
+      el.className = 'fixed top-4 left-1/2 transform -translate-x-1/2 z-50 w-full max-w-2xl px-4';
+      document.body.prepend(el);
     }
-    
-    @keyframes slideInUp {
-        from {
-            opacity: 0;
-            transform: translateY(30px);
-        }
-        to {
-            opacity: 1;
-            transform: translateY(0);
-        }
+
+    // reset classes
+    el.classList.remove('hidden', 'bg-red-100', 'bg-green-100', 'text-red-800', 'text-green-800', 'dark:bg-red-900', 'dark:bg-green-900', 'rounded-md', 'px-4', 'py-3');
+
+    // apply simple styling (matches Tailwind-ish classes used in page)
+    el.classList.add('rounded-md', 'px-4', 'py-3');
+    if (type === 'success') {
+      el.classList.add('bg-green-100', 'text-green-800', 'dark:bg-green-900');
+    } else {
+      el.classList.add('bg-red-100', 'text-red-800', 'dark:bg-red-900');
     }
-    
-    .navbar.scrolled {
-        background: var(--nav-bg);
-        box-shadow: 0 2px 20px var(--shadow);
+    el.textContent = message;
+    el.classList.remove('hidden');
+
+    // auto-hide after 8s
+    window.clearTimeout(el._hideTimer);
+    el._hideTimer = setTimeout(function () {
+      el.classList.add('hidden');
+    }, 8000);
+  }
+
+  // show messages from URL query params (e.g. ?error=Bad+email or ?message=Thanks)
+  function showFromQuery() {
+    var params = new URLSearchParams(window.location.search);
+    if (params.has('error')) {
+      try { showStatus(decodeURIComponent(params.get('error')), 'error'); } catch (e) { showStatus(params.get('error'), 'error'); }
+    } else if (params.has('message')) {
+      try { showStatus(decodeURIComponent(params.get('message')), 'success'); } catch (e) { showStatus(params.get('message'), 'success'); }
     }
-    
-    .navbar {
-        transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease;
-    }
-    
-    @media (max-width: 768px) {
-        #mobileMenu {
-            z-index: 40;
+  }
+
+  // Attach AJAX submit handler to forms marked data-ajax="true"
+  function attachAjaxForms() {
+    qsa('form[data-ajax="true"]').forEach(function (form) {
+      form.addEventListener('submit', async function (ev) {
+        ev.preventDefault();
+        var submitBtn = form.querySelector('button[type="submit"], input[type="submit"]');
+        if (submitBtn) { submitBtn.disabled = true; submitBtn.dataset.origText = submitBtn.innerText; submitBtn.innerText = 'Sending...'; }
+
+        var action = form.getAttribute('action') || window.location.href;
+        var method = (form.getAttribute('method') || 'POST').toUpperCase();
+        var formData = new FormData(form);
+
+        try {
+          var res = await fetch(action, {
+            method: method,
+            body: formData,
+            credentials: 'same-origin',
+            headers: {
+              'Accept': 'application/json'
+            }
+          });
+
+          var contentType = res.headers.get('Content-Type') || '';
+          var isJson = contentType.indexOf('application/json') !== -1;
+
+          if (!res.ok) {
+            // try to extract JSON error or text
+            if (isJson) {
+              var data = await res.json();
+              var msg = data.error || data.message || JSON.stringify(data);
+              showStatus(msg || ('Request failed: ' + res.status), 'error', qs('#formStatus'));
+            } else {
+              var txt = await res.text();
+              showStatus(txt || ('Request failed: ' + res.status), 'error', qs('#formStatus'));
+            }
+            return;
+          }
+
+          // success
+          if (isJson) {
+            var body = await res.json();
+            if (body.error) {
+              showStatus(body.error, 'error', qs('#formStatus'));
+            } else if (body.message) {
+              showStatus(body.message, 'success', qs('#formStatus'));
+              // optional: clear form on success
+              form.reset();
+            } else {
+              showStatus('Success', 'success', qs('#formStatus'));
+              form.reset();
+            }
+          } else {
+            // non-json success — display server text
+            var text = await res.text();
+            showStatus(text || 'Success', 'success', qs('#formStatus'));
+            form.reset();
+          }
+        } catch (err) {
+          showStatus('Network error: ' + (err && err.message ? err.message : err), 'error', qs('#formStatus'));
+        } finally {
+          if (submitBtn) {
+            submitBtn.disabled = false;
+            submitBtn.innerText = submitBtn.dataset.origText || submitBtn.innerText;
+          }
         }
-        
-        .hamburger.active span:nth-child(1) {
-            transform: rotate(45deg) translate(5px, 5px);
-        }
-        
-        .hamburger.active span:nth-child(2) {
-            opacity: 0;
-        }
-        
-        .hamburger.active span:nth-child(3) {
-            transform: rotate(-45deg) translate(7px, -6px);
-        }
-    }
-`;
-document.head.appendChild(style);
+      });
+    });
+  }
+
+  // If a signup page redirects back with ?error=... or ?message=..., showFromQuery will display it.
+  document.addEventListener('DOMContentLoaded', function () {
+    showFromQuery();
+    attachAjaxForms();
+  });
+
+  // Expose showStatus to the window for quick manual testing
+  window.__showStatus = showStatus;
+
+})();
+
+// Note: Form submission is handled by FormManager class above
+// This duplicate handler has been removed to prevent conflicts

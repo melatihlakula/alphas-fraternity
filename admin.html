@@ -86,6 +86,7 @@
                             <th class="px-4 py-3 text-left">Email</th>
                             <th class="px-4 py-3 text-left">Phone</th>
                             <th class="px-4 py-3 text-left">Message</th>
+                            <th class="px-4 py-3 text-left">IP Address</th>
                             <th class="px-4 py-3 text-left">Date</th>
                         </tr>
                     </thead>
@@ -232,7 +233,7 @@
                     // Update table
                     const tbody = document.getElementById('contactsTable');
                     if (!data.contacts || data.contacts.length === 0) {
-                        tbody.innerHTML = '<tr><td colspan="6" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">No contact submissions yet.</td></tr>';
+                        tbody.innerHTML = '<tr><td colspan="7" class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">No contact submissions yet.</td></tr>';
                     } else {
                         tbody.innerHTML = data.contacts.map(contact => `
                             <tr class="border-b border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
@@ -248,6 +249,10 @@
                                     <div class="max-w-xs truncate text-gray-900 dark:text-white" title="${escapeHtml(contact.message || '')}">
                                         ${escapeHtml((contact.message || '').substring(0, 50))}${(contact.message || '').length > 50 ? '...' : ''}
                                     </div>
+                                </td>
+                                <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400 font-mono text-xs">
+                                    ${contact.ip_address ? escapeHtml(contact.ip_address) : 'N/A'}
+                                    ${contact.user_agent ? '<br><span class="text-xs opacity-75" title="' + escapeHtml(contact.user_agent) + '">' + escapeHtml(contact.user_agent.substring(0, 30)) + '...</span>' : ''}
                                 </td>
                                 <td class="px-4 py-3 text-sm text-gray-600 dark:text-gray-400">
                                     ${contact.created_at ? new Date(contact.created_at).toLocaleString() : 'N/A'}
