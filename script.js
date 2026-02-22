@@ -442,6 +442,44 @@ class AuthNavManager {
     }
 }
 
+// Scroll Reveal: elegant fade-in when sections enter viewport
+class ScrollRevealManager {
+    constructor() {
+        this.selector = '.reveal, .reveal-stagger, .pledge-reveal';
+        this.observer = null;
+        this.init();
+    }
+
+    init() {
+        if (typeof IntersectionObserver === 'undefined') {
+            document.querySelectorAll(this.selector).forEach(el => el.classList.add('in-view'));
+            return;
+        }
+        this.observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('in-view');
+                    this.observer.unobserve(entry.target);
+                }
+            });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+        document.querySelectorAll(this.selector).forEach(el => this.observer.observe(el));
+    }
+}
+
+// Scroll progress bar (elegant top line)
+function initScrollProgress() {
+    const bar = document.getElementById('scrollProgress');
+    if (!bar) return;
+    function update() {
+        const winScroll = document.documentElement.scrollTop || document.body.scrollTop;
+        const height = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+        bar.style.transform = `scaleX(${height > 0 ? winScroll / height : 0})`;
+    }
+    window.addEventListener('scroll', () => requestAnimationFrame(update));
+    update();
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all managers
@@ -449,6 +487,8 @@ document.addEventListener('DOMContentLoaded', () => {
     new NavigationManager();
     new FormManager();
     new AnimationManager();
+    new ScrollRevealManager();
+    initScrollProgress();
     const authNavManager = new AuthNavManager(); // Check auth status for navigation
     
     // Refresh navigation when page becomes visible (e.g., returning from login/signup)

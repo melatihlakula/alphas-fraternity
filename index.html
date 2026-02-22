@@ -5,10 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>ALPHAS - Elite Fraternity</title>
     <link rel="stylesheet" href="tailwind-like.css">
+    <link rel="stylesheet" href="enhancements.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 </head>
 <body>
+    <div id="scrollProgress" class="scroll-progress" aria-hidden="true"></div>
     <!-- Navigation -->
     <nav class="fixed top-0 w-full bg-white/95 dark:bg-black/95 backdrop-blur-md border-b border-gray-200 dark:border-gray-800 z-50 transition-all duration-300" id="navbar">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -73,6 +75,8 @@
 
     <!-- Hero Section -->
     <section id="home" class="min-h-screen flex items-center bg-white dark:bg-black relative overflow-hidden pt-20">
+        <div class="hero-glow hero-glow-1" aria-hidden="true"></div>
+        <div class="hero-glow hero-glow-2" aria-hidden="true"></div>
         <div class="flex-1 text-center px-8 z-10">
             <div class="mb-8">
                 <img src="newlogo.jpeg" alt="ALPHAS Logo" class="w-32 h-32 rounded-2xl object-cover mx-auto shadow-2xl">
@@ -82,28 +86,28 @@
             <p class="text-lg text-black dark:text-white max-w-3xl mx-auto mb-8 leading-relaxed">Forging the next generation of leaders through brotherhood, discipline, and unwavering commitment to excellence.</p>
             
             <!-- ALPHAS Acronym -->
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto mb-8">
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 max-w-4xl mx-auto mb-8 reveal-stagger" id="acronym-grid">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">A</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Act</span>
                 </div>
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">L</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Lead</span>
                 </div>
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">P</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Protect</span>
                 </div>
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">H</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Honor</span>
                 </div>
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">A</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Aspire</span>
                 </div>
-                <div class="bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl">
+                <div class="reveal-item bg-white dark:bg-black border-2 border-black dark:border-white rounded-xl p-4 hover:border-red-500 dark:hover:border-red-400 transition-all duration-300 hover:-translate-y-2 hover:shadow-xl card-lift">
                     <span class="block text-3xl font-black text-red-600 dark:text-red-400 mb-2">S</span>
                     <span class="text-sm font-semibold text-black dark:text-white">Serve</span>
                 </div>
@@ -144,7 +148,7 @@
     </section>
 
     <!-- About Section -->
-    <section id="about" class="py-20 bg-white dark:bg-black">
+    <section id="about" class="py-20 bg-white dark:bg-black reveal">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-5xl font-black text-center mb-16 text-black dark:text-white tracking-wider">About ALPHAS</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-start">
@@ -162,37 +166,37 @@
                     <div>
                         <h3 class="text-2xl font-bold mb-6 text-black dark:text-white">Core Values</h3>
                         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-dumbbell text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">DISCIPLINE</h4>
                                 <p class="text-black dark:text-white">Unwavering commitment to self-control and excellence</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-shield-alt text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">INTEGRITY</h4>
                                 <p class="text-black dark:text-white">Unwavering commitment to truth and honor</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-handshake text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">BROTHERHOOD</h4>
                                 <p class="text-black dark:text-white">Unbreakable bonds of loyalty and mutual support</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-eye text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">VISION</h4>
                                 <p class="text-black dark:text-white">Clear purpose and forward-thinking leadership</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-balance-scale text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">ACCOUNTABILITY</h4>
                                 <p class="text-black dark:text-white">Taking responsibility for our actions and decisions</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift">
                                 <i class="fas fa-hands-helping text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">SERVICE</h4>
                                 <p class="text-black dark:text-white">Dedication to helping others and our community</p>
                             </div>
-                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center md:col-span-2 lg:col-span-1">
+                            <div class="bg-white dark:bg-black p-6 rounded-xl border-2 border-black dark:border-white hover:-translate-y-2 hover:shadow-xl transition-all duration-300 text-center card-lift md:col-span-2 lg:col-span-1">
                                 <i class="fas fa-seedling text-4xl text-red-600 dark:text-red-400 mb-4"></i>
                                 <h4 class="text-xl font-bold mb-2 text-black dark:text-white">GROWTH</h4>
                                 <p class="text-black dark:text-white">Continuous improvement and personal development</p>
@@ -214,7 +218,7 @@
     </section>
 
     <!-- Core Pillars Section -->
-    <section id="pillars" class="py-20 bg-black dark:bg-white">
+    <section id="pillars" class="py-20 bg-black dark:bg-white reveal">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-5xl font-black text-center mb-16 text-gray-900 dark:text-white tracking-wider">Core Pillars</h2>
             <div class="grid grid-cols-1 lg:grid-cols-3 gap-12 items-center">
@@ -272,14 +276,14 @@
     </section>
 
     <!-- ALPHAS Pledge Section -->
-    <section class="py-20 bg-black dark:bg-white">
+    <section class="py-20 bg-black dark:bg-white reveal">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-5xl font-black text-white dark:text-black tracking-wider mb-4">PLEDGE</h2>
-                <div class="w-24 h-1 bg-white dark:bg-black mx-auto"></div>
+                <div class="w-24 h-1 bg-white dark:bg-black mx-auto rounded-sm"></div>
             </div>
             
-            <div class="relative">
+            <div class="relative pledge-reveal">
                 <!-- Split background effect -->
                 <div class="absolute inset-0 bg-white dark:bg-black rounded-3xl border-2 border-white dark:border-black"></div>
                 
@@ -319,7 +323,7 @@
     </section>
 
     <!-- Contact Section -->
-    <section id="contact" class="py-20 bg-white dark:bg-black">
+    <section id="contact" class="py-20 bg-white dark:bg-black reveal">
         <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
             <h2 class="text-5xl font-black text-center mb-16 text-gray-900 dark:text-white tracking-wider">Join the Pack</h2>
             <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">

@@ -38,6 +38,8 @@ body {
 .hidden { display: none; }
 
 /* Flexbox */
+.flex-1 { flex: 1 1 0%; }
+.flex-shrink-0 { flex-shrink: 0; }
 .flex-col { flex-direction: column; }
 .flex-row { flex-direction: row; }
 .flex-wrap { flex-wrap: wrap; }

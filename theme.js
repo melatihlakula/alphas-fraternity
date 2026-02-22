@@ -12,12 +12,11 @@
 
   function applyTheme(theme) {
     if (theme === 'dark') {
-      document.documentElement.classList.add('class');
       document.documentElement.classList.add('dark');
-      icon().className = 'fas fa-sun';
+      if (toggle && icon()) icon().className = 'fas fa-sun';
     } else {
       document.documentElement.classList.remove('dark');
-      icon().className = 'fas fa-moon';
+      if (toggle && icon()) icon().className = 'fas fa-moon';
     }
     localStorage.setItem('alpha-theme', theme);
   }

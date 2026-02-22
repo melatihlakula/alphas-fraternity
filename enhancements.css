@@ -1,0 +1,242 @@
+/* ============================================
+   ALPHAS Fraternity - Advanced CSS Enhancements
+   Day/Night theme, scroll effects, elegant animations
+   ============================================ */
+
+/* --- Theme: Light (Day) --- */
+:root {
+    --theme-bg: #fafafa;
+    --theme-bg-alt: #ffffff;
+    --theme-bg-card: #ffffff;
+    --theme-text: #0f0f0f;
+    --theme-text-muted: #525252;
+    --theme-accent: #b91c1c;
+    --theme-accent-soft: rgba(185, 28, 28, 0.12);
+    --theme-border: #e5e5e5;
+    --theme-nav-bg: rgba(255, 255, 255, 0.92);
+    --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.08), 0 2px 4px -2px rgba(0, 0, 0, 0.06);
+    --theme-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.08), 0 8px 10px -6px rgba(0, 0, 0, 0.04);
+    --theme-ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+    --theme-ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+}
+
+/* --- Theme: Dark (Night) --- */
+html.dark {
+    --theme-bg: #0a0a0a;
+    --theme-bg-alt: #141414;
+    --theme-bg-card: #1a1a1a;
+    --theme-text: #fafafa;
+    --theme-text-muted: #a3a3a3;
+    --theme-accent: #f87171;
+    --theme-accent-soft: rgba(248, 113, 113, 0.15);
+    --theme-border: #262626;
+    --theme-nav-bg: rgba(10, 10, 10, 0.92);
+    --theme-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -2px rgba(0, 0, 0, 0.2);
+    --theme-shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.4), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
+}
+
+/* Smooth scroll globally */
+html {
+    scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    .reveal, .reveal-item, .parallax-soft { opacity: 1 !important; transform: none !important; }
+}
+
+/* Body theme transition */
+body {
+    background-color: var(--theme-bg);
+    color: var(--theme-text);
+    transition: background-color 0.5s var(--theme-ease-out), color 0.4s var(--theme-ease-out);
+}
+
+/* Section theme transition (day/night toggle) */
+section,
+footer,
+nav {
+    transition: background-color 0.5s var(--theme-ease-out), color 0.35s var(--theme-ease-out), border-color 0.35s var(--theme-ease-out);
+}
+
+/* --- Scroll reveal: sections fade and slide up --- */
+.reveal {
+    opacity: 0;
+    transform: translateY(32px);
+    transition: opacity 0.8s var(--theme-ease-out), transform 0.8s var(--theme-ease-out);
+}
+
+.reveal.in-view {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Stagger children (e.g. acronym cards, value items) */
+.reveal-stagger .reveal-item {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.6s var(--theme-ease-out), transform 0.6s var(--theme-ease-out);
+}
+
+.reveal-stagger.in-view .reveal-item {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.reveal-stagger .reveal-item:nth-child(1) { transition-delay: 0.05s; }
+.reveal-stagger .reveal-item:nth-child(2) { transition-delay: 0.1s; }
+.reveal-stagger .reveal-item:nth-child(3) { transition-delay: 0.15s; }
+.reveal-stagger .reveal-item:nth-child(4) { transition-delay: 0.2s; }
+.reveal-stagger .reveal-item:nth-child(5) { transition-delay: 0.25s; }
+.reveal-stagger .reveal-item:nth-child(6) { transition-delay: 0.3s; }
+.reveal-stagger .reveal-item:nth-child(7) { transition-delay: 0.35s; }
+.reveal-stagger .reveal-item:nth-child(8) { transition-delay: 0.4s; }
+.reveal-stagger .reveal-item:nth-child(9) { transition-delay: 0.45s; }
+
+/* --- Parallax: subtle movement on scroll --- */
+.parallax-soft {
+    will-change: transform;
+    transition: transform 0.15s linear;
+}
+
+/* --- Navbar: glass + shadow when scrolled --- */
+#navbar {
+    transition: box-shadow 0.4s var(--theme-ease-out), background-color 0.4s var(--theme-ease-out);
+}
+
+#navbar.scrolled {
+    box-shadow: var(--theme-shadow);
+}
+
+html.dark #navbar.scrolled {
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.35);
+}
+
+/* --- Elegant link underline (nav) --- */
+nav a.relative span:last-child {
+    height: 2px;
+    background: var(--theme-accent);
+    transition: width 0.35s var(--theme-ease-out);
+}
+
+/* --- Hero: subtle gradient orbs (theme-aware) --- */
+.hero-glow {
+    position: absolute;
+    border-radius: 50%;
+    filter: blur(80px);
+    opacity: 0.4;
+    pointer-events: none;
+    transition: opacity 0.6s var(--theme-ease-out);
+}
+
+.hero-glow-1 {
+    width: 400px;
+    height: 400px;
+    background: var(--theme-accent);
+    top: -100px;
+    right: -100px;
+}
+
+.hero-glow-2 {
+    width: 300px;
+    height: 300px;
+    background: var(--theme-text);
+    bottom: 10%;
+    left: -80px;
+    opacity: 0.15;
+}
+
+html.dark .hero-glow {
+    opacity: 0.25;
+}
+
+/* --- Cards: lift + glow on hover --- */
+.card-lift {
+    transition: transform 0.4s var(--theme-ease-out), box-shadow 0.4s var(--theme-ease-out), border-color 0.3s ease;
+}
+
+.card-lift:hover {
+    transform: translateY(-6px);
+    box-shadow: var(--theme-shadow-lg);
+}
+
+/* --- Buttons: elegant scale + shadow --- */
+a[href="#about"],
+a[href="/signup"],
+a[href="#contact"] {
+    transition: transform 0.3s var(--theme-ease-out), box-shadow 0.3s var(--theme-ease-out), background-color 0.25s ease, color 0.25s ease;
+}
+
+a[href="#about"]:hover,
+a[href="/signup"]:hover,
+a[href="#contact"]:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--theme-shadow-lg);
+}
+
+/* --- Section dividers: thin elegant line --- */
+.section-divider {
+    width: 64px;
+    height: 3px;
+    background: var(--theme-accent);
+    margin: 1rem auto;
+    border-radius: 2px;
+    opacity: 0.9;
+}
+
+/* --- Pledge / blockquote: subtle scale-in when revealed --- */
+.pledge-reveal {
+    opacity: 0;
+    transform: scale(0.98) translateY(20px);
+    transition: opacity 0.9s var(--theme-ease-out) 0.1s, transform 0.9s var(--theme-ease-out) 0.1s;
+}
+
+.pledge-reveal.in-view {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+}
+
+/* --- Form inputs: focus ring (theme-aware) --- */
+.contact-form input:focus,
+.contact-form textarea:focus {
+    box-shadow: 0 0 0 3px var(--theme-accent-soft);
+    outline: none;
+}
+
+/* --- Acronym letters: subtle pulse on hover --- */
+@keyframes letter-glow {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.85; }
+}
+
+.grid.grid-cols-2 .rounded-xl:hover span:first-child,
+.grid.grid-cols-6 .rounded-xl:hover span:first-child {
+    animation: letter-glow 1.2s var(--theme-ease-in-out);
+}
+
+/* --- Scroll progress (optional): thin top bar --- */
+.scroll-progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, var(--theme-accent), #dc2626);
+    z-index: 9999;
+    transform-origin: left;
+    transform: scaleX(0);
+    transition: transform 0.12s ease-out;
+}
+
+/* --- Reduced motion --- */
+@media (prefers-reduced-motion: reduce) {
+    .reveal, .reveal-stagger .reveal-item, .pledge-reveal {
+        opacity: 1;
+        transform: none;
+        transition: none;
+    }
+    .card-lift:hover,
+    a[href="#about"]:hover, a[href="/signup"]:hover, a[href="#contact"]:hover {
+        transform: none;
+    }
+}
